@@ -8,7 +8,7 @@ class StickerListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Sticker
-        fields = ('name', 'background_color', 'background_pattern',
+        fields = ('id', 'name', 'background_color', 'background_pattern',
                   'image', 'font', 'font_color', 'message', 'creator', 'created_at', 'updated_at', 'draft')
 
 
