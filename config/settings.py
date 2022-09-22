@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     "corsheaders",
+    'rest_framework.authtoken',
     'djoser',
     'stickers',
 ]
@@ -144,3 +145,9 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 django_on_heroku.settings(locals())
 del DATABASES['default']['OPTIONS']['sslmode']
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+}
