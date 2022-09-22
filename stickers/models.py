@@ -22,6 +22,7 @@ COLOR_CHOICES = [
     ('red', 'Red'),
     ('fuschia', 'Fuschia'),
     ('pink', 'Pink'),
+    ('orange', 'Orange'),
 ]
 
 PATTERN_CHOICES = [
