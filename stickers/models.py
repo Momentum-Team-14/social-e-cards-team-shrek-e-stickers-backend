@@ -5,10 +5,25 @@ from django.contrib.auth.models import AbstractUser
 
 
 class CustomUser(AbstractUser):
-    pass
+    bio = models.TextField(max_length=200, help_text='Enter a bio', blank=True, null=True)
+    avatar = models.URLField(max_length=100, blank=True, null=True)
+    display_name = models.CharField(
+        max_length=25,
+        help_text='Enter the name you want to display',
+        blank=True,
+        null=True
+        )
 
     def __str__(self):
-        return self.username
+        return f'username={self.username}: displayname={self.display_name}'
+
+
+class Follow(models.Model):
+    follower = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='followers')
+    following = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='follows')
+    
+    def __str__(self):
+        return f'Follower:{self.follower.username} Following:{self.following.username}'
 
 
 COLOR_CHOICES = [
@@ -79,3 +94,6 @@ class Sticker(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     draft = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f'{self.name}'
