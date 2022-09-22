@@ -12,5 +12,5 @@ class StickerList(generics.ListCreateAPIView):
 
 class StickerDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Sticker.objects.all()
-    serializer_class = StickerDetailSerializer
+    serializer_class = StickerListSerializer
     permission_classes = []

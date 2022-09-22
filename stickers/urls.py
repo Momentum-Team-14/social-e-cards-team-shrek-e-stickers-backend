@@ -5,7 +5,7 @@ from stickers import views
 # Create your views here.
 urlpatterns = [
     path('stickers/', views.StickerList.as_view(), name="all-stickers"),
-    path('stickers/<int:pk>', views.StickerDetail.as_view(), name='sticker-detail'),
+    path('stickers/<int:pk>/', views.StickerDetail.as_view(), name='sticker-detail'),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
