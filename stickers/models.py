@@ -27,9 +27,17 @@ class Follow(models.Model):
 
 
 COLOR_CHOICES = [
+    ('black', 'Black'),
+    ('white', 'White'),
+    ('yellow', 'Yellow'),
+    ('green', 'Green'),
+    ('turqoise', 'Turqoise'),
+    ('blue', 'Blue'),
+    ('purple', 'Purple'),
     ('red', 'Red'),
+    ('fuschia', 'Fuschia'),
     ('pink', 'Pink'),
-    ('black', 'Black')
+    ('orange', 'Orange'),
 ]
 
 PATTERN_CHOICES = [
@@ -38,13 +46,13 @@ PATTERN_CHOICES = [
 ]
 
 FONT_CHOICES = [
-    ('ms+madi', 'Ms+Madi'),
-    ('josefin+sans', 'Josefin+Sans'),
-    ('dosis', 'Dosis'),
-    ('dangrek', 'Dangrek'),
     ('dancing+script', 'Dancing+Script'),
+    ('dangrek', 'Dangrek'),
+    ('dosis', 'Dosis'),
     ('eb+garamond', 'EB+Garamond'),
+    ('josefin+sans', 'Josefin+Sans'),
     ('lobster', 'Lobster'),
+    ('ms+madi', 'Ms+Madi'),
     ('pacifico', 'Pacifico'),
 ]
 
