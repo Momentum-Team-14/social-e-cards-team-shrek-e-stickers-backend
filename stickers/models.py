@@ -20,7 +20,7 @@ class CustomUser(AbstractUser):
 
 class Follow(models.Model):
     follower = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='followers')
-    following = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='follows')
+    followed = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='follows')
     
     def __str__(self):
         return f'Follower:{self.follower.username} Following:{self.following.username}'
