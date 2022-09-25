@@ -1,9 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.utils.translation import gettext_lazy as _
+
 
 # Create your models here.
-
-
 class CustomUser(AbstractUser):
     bio = models.TextField(
         max_length=200, help_text='Enter a bio', blank=True, null=True)
@@ -29,20 +29,6 @@ class Follow(models.Model):
         return f'Follower:{self.follower.username} Following:{self.following.username}'
 
 
-COLOR_CHOICES = [
-    ('black', 'Black'),
-    ('white', 'White'),
-    ('yellow', 'Yellow'),
-    ('green', 'Green'),
-    ('turqoise', 'Turqoise'),
-    ('blue', 'Blue'),
-    ('purple', 'Purple'),
-    ('red', 'Red'),
-    ('fuschia', 'Fuschia'),
-    ('pink', 'Pink'),
-    ('orange', 'Orange'),
-]
-
 PATTERN_CHOICES = [
     ('https://www.transparenttextures.com/patterns/black-thread.png',
      'black-thread'),
@@ -62,48 +48,79 @@ PATTERN_CHOICES = [
         'dimensions')
 ]
 
-FONT_CHOICES = [
-    ('dancing+script', 'Dancing+Script'),
-    ('dangrek', 'Dangrek'),
-    ('dosis', 'Dosis'),
-    ('eb+garamond', 'EB+Garamond'),
-    ('josefin+sans', 'Josefin+Sans'),
-    ('lobster', 'Lobster'),
-    ('ms+madi', 'Ms+Madi'),
-    ('pacifico', 'Pacifico'),
+IMAGE_CHOICES = [
+    ('https://media.istockphoto.com/photos/donut-with-sprinkles-isolated-picture-id538335769?k=20&m=538335769&s=612x612&w=0&h=A1DAZd6aHjfRyq2qKAKuBD9KAf0cq1LXKW8mpvTxKgU=',
+     'donut'),
+    ('https://cdn.pixabay.com/photo/2015/04/19/08/33/flower-729512__340.jpg',
+        'flower'),
+    ('https://natureconservancy-h.assetsadobe.com/is/image/content/dam/tnc/nature/en/photos/shutterstock_1512536354.jpg?crop=0%2C317%2C2664%2C1465&wid=4000&hei=2200&scl=0.666',
+        'butterfly'),
+    ('http://cdn.shopify.com/s/files/1/0641/1521/products/patches-smiley-face-happy-sad-venn.jpg?v=1613156051',
+        'happy-sad-face'),
+    ('https://img.freepik.com/free-vector/ice-cream-cone-cartoon-icon-illustration-sweet-food-icon-concept-isolated-flat-cartoon-style_138676-2924.jpg?w=360',
+        'ice-cream'),
+    ('https://illustoon.com/photo/4292.png',
+        'thumbs-up'),
+    ('https://www.pngitem.com/pimgs/m/595-5957528_black-heart-symbol-outline-love-heart-png-transparent.png',
+        'heart'),
 ]
 
 
 class Sticker(models.Model):
-    name = models.CharField(
+
+    class Colors(models.TextChoices):
+        BLACK = 'black', _('Black')
+        WHITE = 'white', _('White')
+        YELLOW = 'yellow', _('Yellow')
+        GREEN = 'green', _('Green')
+        TURQUOISE = 'turqoise', _('Turqoise')
+        BLUE = 'blue', _('Blue')
+        PURPLE = 'purple', _('Purple')
+        RED = 'red', _('Red')
+        FUSCHIA = 'fuschia', _('Fuschia')
+        PINK = 'pink', _('Pink')
+        ORANGE = 'orange', _('Orange')
+
+    class Fonts(models.TextChoices):
+        DANGREK = 'dangrek', _('Dangrek')
+        DANCING_SCRIPT = 'dancing+script', _('Dancing+Script')
+        DOSIS = 'dosis', _('Dosis')
+        EB_GARAMOND = 'eb+garamond', _('EB+Garamond')
+        JOSEFIN_SANS = 'josefin+sans', _('Josefin+Sans')
+        LOBSTER = 'lobster', _('Lobster')
+        MS_MADI = 'ms+madi', _('Ms+Madi')
+        PACIFICO = 'pacifico', _('Pacifico')
+
+    title = models.CharField(
         max_length=50,
         help_text="name of your sticker")
     background_color = models.CharField(
         max_length=50,
-        choices=COLOR_CHOICES,
-        default='white',
+        choices=Colors.choices,
+        default=Colors.WHITE,
     )
-    background_pattern = models.URLField(
-        max_length=100,
+    pattern_url = models.URLField(
+        max_length=200,
         choices=PATTERN_CHOICES,
         default='',
         blank=True,
         null=True
     )
-    image = models.URLField(
-        max_length=100,
+    image_url = models.URLField(
+        max_length=200,
+        choices=IMAGE_CHOICES,
         blank=True,
         null=True
     )
     font = models.CharField(
         max_length=50,
-        choices=FONT_CHOICES,
-        default='pacifico',
+        choices=Fonts.choices,
+        default=Fonts.PACIFICO,
     )
     font_color = models.CharField(
         max_length=50,
-        choices=COLOR_CHOICES,
-        default='black',
+        choices=Colors.choices,
+        default=Colors.BLACK,
     )
     message = models.CharField(
         max_length=200,
