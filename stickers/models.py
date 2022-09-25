@@ -99,6 +99,13 @@ class Sticker(models.Model):
         choices=Colors.choices,
         default=Colors.WHITE,
     )
+    background_pattern = models.URLField(
+        max_length=100,
+        choices='',
+        default='',
+        blank=True,
+        null=True
+    )
     pattern_url = models.URLField(
         max_length=200,
         choices=PATTERN_CHOICES,
