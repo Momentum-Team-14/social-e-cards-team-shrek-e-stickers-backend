@@ -99,13 +99,6 @@ class Sticker(models.Model):
         choices=Colors.choices,
         default=Colors.WHITE,
     )
-    background_pattern = models.URLField(
-        max_length=100,
-        choices='',
-        default='',
-        blank=True,
-        null=True
-    )
     pattern_url = models.URLField(
         max_length=200,
         choices=PATTERN_CHOICES,
@@ -145,4 +138,4 @@ class Sticker(models.Model):
     draft = models.BooleanField(default=True)
 
     def __str__(self):
-        return f'{self.name}'
+        return f'{self.title}'
