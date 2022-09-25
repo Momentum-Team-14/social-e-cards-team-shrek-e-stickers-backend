@@ -26,7 +26,7 @@ class Follow(models.Model):
         CustomUser, on_delete=models.CASCADE, related_name='followed_by', blank=True, null=True)
 
     def __str__(self):
-        return f'Follower:{self.follower.username} Following:{self.following.username}'
+        return f'Follower:{self.following_user.username} Following:{self.followed_user.username}'
 
 
 PATTERN_CHOICES = [

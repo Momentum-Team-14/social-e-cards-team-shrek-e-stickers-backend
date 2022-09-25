@@ -8,7 +8,7 @@ from .models import CustomUser, Sticker, Follow
 
 class CustomUserAdmin(UserAdmin):
     model = CustomUser
-    list_display = ['email', 'username', ]
+    list_display = ['username', ]
 
 
 admin.site.register(CustomUser, CustomUserAdmin)
