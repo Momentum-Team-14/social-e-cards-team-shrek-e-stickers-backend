@@ -23,20 +23,28 @@ class StickerDetailSerializer(serializers.ModelSerializer):
 
 # serializer for Follow pages that uses CustomUser model fields
 class FollowListSerializer(serializers.ModelSerializer):
+    # username = serializers.SerializerMethodField()
 
     class Meta:
         model = CustomUser
-        fields = ('id', 'username', 'display_name', 'avatar',)
+        fields = ('id', 'display_name', 'avatar',)
+        # fields = ('id', 'username', 'display_name', 'avatar',)
+
+    # def get_username(self, obj):
+    #     username = CustomUser.objects.filter(id=obj.id)
+    #     return username
 
 
 class UserSerializer(serializers.ModelSerializer):
     following_count = serializers.SerializerMethodField()
     followed_count = serializers.SerializerMethodField()
     stickers = StickerListSerializer(many=True, read_only=True)
+    following = FollowListSerializer(many=True, read_only=True)
+    followed_by = FollowListSerializer(many=True, read_only=True)
 
     class Meta:
         model = CustomUser
-        fields = ('id', 'username', 'bio', 'avatar', 'display_name',
+        fields = ('id', 'username', 'bio', 'avatar', 'display_name', 'following', 'followed_by',
                   'following_count', 'followed_count', 'stickers',)
 
     def get_following_count(self, obj):
@@ -48,7 +56,6 @@ class UserSerializer(serializers.ModelSerializer):
         return count
 
 
-# serializer just for the Follow model fields if we need it?
 class FollowSerializer(serializers.ModelSerializer):
 
     class Meta:

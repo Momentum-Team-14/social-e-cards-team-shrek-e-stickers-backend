@@ -76,67 +76,24 @@ class FollowedList(generics.ListAPIView):
         return user_followers
 
 
-# Example code, not tested
 class FollowCreate(generics.ListCreateAPIView):
-    pass  # using FollowCreate in urlpatterns so had to pass for now
-#     queryset = Follow.objects.all()
-#     serializer_class = FollowSerializer
-#     permission_classes = ()
+    queryset = Follow.objects.all()
+    serializer_class = FollowSerializer
+    permission_classes = ()
 
-#     def perform_create(self, serializer):
-#         queryset = self.queryset.filter(
-#             followed_user=self.request.data['follow'],
-#             following_user=self.request.user
-#             )
-#         if len(queryset) == 0:
-#             serializer.save(
-#                 followed_user=self.request.data['follow'],
-#                 following_user=self.request.user
-#                 )
-#             return Response(status=status.HTTP_201_CREATED)
+    def perform_create(self, serializer):
+        user_to_follow = get_object_or_404(CustomUser, pk=self.kwargs['pk'])
+        user = self.request.user
+        serializer.save(followed_user=user_to_follow, following_user=user)
 
 
-# prep for unfollow but doesn't do anything yet
 class UnFollow(generics.DestroyAPIView):
     queryset = Follow.objects.all()
     serializer_class = FollowSerializer
     permission_classes = ()
 
+    def destroy(self, request, *args, **kwargs):
+        user_to_unfollow = self.get_object_or_404(CustomUser, pk=self.kwargs['pk'])
+        self.perform_destroy(user_to_unfollow)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
-# Examples
-# class FollowCreate(generics.ListCreateAPIView):
-#     queryset = Follow.objects.all()
-#     serializer_class = FollowSerializer
-#     permission_classes = ()
-
-#     def perform_create(self, serializer):
-#         followed_user = CustomUser.objects.get(pk=self.request.data['follow'])
-#         if followed_user.id is not self.request.user.id:
-#             serializer.save(following_user=self.request.user, followed_user=followed_user)
-#         else:
-#             return Response({"error": "Users cannot follow themselves"})
-###############################################################################
-# example code that may help
-# def follow_unfollow_user(request):
-#     if request.method=="POST":
-#         logged_in_user = CustomUser.objects.get(user=request.user)
-#         pk = request.POST.get('user_pk')
-#         obj = CustomUser.objects.get(pk=pk)
-
-#         if obj.user in logged_in_user.following.all():
-#             logged_in_user.following.remove(obj.user)
-#         else:
-#             logged_in_user.following.add(obj.user)
-#         return Response(status=status.HTTP_201_CREATED)
-#     return
-###############################################################################
-# More example code
-# def follow(request):
-#     if request.method == 'POST':
-#         value = request.POST['value']
-#         user = request.POST['user']
-#         follower = request.POST['follower']
-#         if value == 'follow':
-#             add_follow = Follow.objects.create(followed_user=follower, following_user=user)
-#             add_follow.save()
-#         return Response(status=status.HTTP_201_CREATED)
