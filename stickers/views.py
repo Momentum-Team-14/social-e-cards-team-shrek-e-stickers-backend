@@ -20,6 +20,18 @@ class StickerList(generics.ListCreateAPIView):
     permission_classes = []
 
 
+class UserStickerList(generics.ListCreateAPIView):
+    serializer_class = StickerListSerializer
+    permission_classes = []
+
+    def perform_create(self, serializer):
+        serializer.save(creator=self.request.user)
+
+    def get_queryset(self):
+        queryset = self.request.user.stickers.all()
+        return queryset
+
+
 class StickerDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Sticker.objects.all()
     serializer_class = StickerListSerializer
@@ -91,7 +103,7 @@ class UnFollow(generics.DestroyAPIView):
     permission_classes = ()
 
 
-#Examples
+# Examples
 # class FollowCreate(generics.ListCreateAPIView):
 #     queryset = Follow.objects.all()
 #     serializer_class = FollowSerializer

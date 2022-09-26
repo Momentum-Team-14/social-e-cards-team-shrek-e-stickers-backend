@@ -10,8 +10,8 @@ List all public stickers
 
 ```json
 {
-  "username": "donkey",
-  "password": "waffles"
+  "username": "admin",
+  "password": "kittykat2"
 }
 ```
 
@@ -19,7 +19,7 @@ List all public stickers
 
 ### GET `/users/`
 
-**restricted to admin users only**
+**restricted to admin users only** TODO-permissions
 
 List all users
 
@@ -33,13 +33,19 @@ Detail for one user (getting the information using the pk for the user)
 
 ### PATCH/PUT/DELETE `/profile/<int:pk>/`
 
-Edit or delete for one user (getting the information using the pk for the user)
+Edit or delete for one user (pk for the user)
+
+---
+
+### GET `/user/<int:pk>/stickers`
+
+List stickers for logged in user (pk for the user)
 
 ---
 
 ### GET `/stickers/`
 
-List all your stickers
+List of all stickers
 
 ---
 
@@ -61,9 +67,26 @@ Update or delete a specific sticker
 
 ---
 
-### GET `/stickers/following/`
+### GET `/stickers/following/` # not yet available
 
-Show stickers for users followed by logged in user
+List of stickers from users followed by logged in user
 
 ---
 
+### POST/PATCH/PUT `/user/<int:pk>/follow/`
+
+Follow/unfollow a user (pk for the user)
+
+---
+
+### GET `/following/`
+
+List of who the logged in user is following
+
+---
+
+### GET `/followed-by/`
+
+List of who is following the logged in user
+
+---
