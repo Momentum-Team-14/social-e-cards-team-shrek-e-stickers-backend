@@ -5,7 +5,8 @@ from rest_framework.serializers import ListSerializer
 
 
 class StickerListSerializer(serializers.ModelSerializer):
-    creator = serializers.SlugRelatedField(slug_field="username", read_only=True)
+    creator = serializers.SlugRelatedField(
+        slug_field="username", read_only=True)
 
     class Meta:
         model = Sticker
@@ -25,7 +26,7 @@ class FollowListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ('id', 'display_name', 'avatar',)
+        fields = ('id', 'username', 'display_name', 'avatar',)
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -35,7 +36,8 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ('id', 'username', 'bio', 'avatar', 'display_name', 'following_count', 'followed_count', 'stickers',)
+        fields = ('id', 'username', 'bio', 'avatar', 'display_name',
+                  'following_count', 'followed_count', 'stickers',)
 
     def get_following_count(self, obj):
         count = len(Follow.objects.filter(following_user=obj.id))
