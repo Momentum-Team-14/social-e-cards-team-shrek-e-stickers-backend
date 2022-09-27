@@ -11,7 +11,7 @@ urlpatterns = [
     path('user/<int:pk>/stickers/',
          views.UserStickerList.as_view(), name='user-sticker'),
     # may need to use the userpk inbetween
-    path('user/follow/', views.FollowCreate.as_view(), name='follow-user'),
+    path('user/<int:pk>/follow/', views.FollowCreate.as_view(), name='follow-user'),
     path('following/', views.FollowingList.as_view(), name="following-users"),
     path('followed-by/', views.FollowedList.as_view(), name="followed-by-users"),
     path('', views.api_root),
