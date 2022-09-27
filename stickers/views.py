@@ -32,6 +32,20 @@ class UserStickerList(generics.ListCreateAPIView):
         return queryset
 
 
+class FollowListStickers(generics.ListAPIView):
+    queryset = Sticker.objects.none()
+    serializer_class = StickerListSerializer
+    permission_classes = ()
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        list_of_followed_users = Follow.objects.filter(following_user=self.request.user)
+        for user in list_of_followed_users:
+            stickers = Sticker.objects.filter(creator=user.followed_user)
+            queryset = queryset | stickers
+        return queryset
+
+
 class StickerDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Sticker.objects.all()
     serializer_class = StickerListSerializer
@@ -42,6 +56,17 @@ class UserList(generics.ListAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
     permission_classes = ()
+
+
+class UserProfile(generics.RetrieveUpdateDestroyAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = ()
+
+    def get_queryset(self):
+        user_id = CustomUser.objects.get(id=self.request.user.id)
+        queryset = CustomUser.objects.filter(username=user_id.username)
+        return queryset
 
 
 class UserDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -87,13 +112,18 @@ class FollowCreate(generics.ListCreateAPIView):
         serializer.save(followed_user=user_to_follow, following_user=user)
 
 
-class UnFollow(generics.DestroyAPIView):
+class UnFollowDestroy(generics.RetrieveDestroyAPIView):
     queryset = Follow.objects.all()
     serializer_class = FollowSerializer
     permission_classes = ()
 
+# need to get the pk of the Follow instance in order to destroy it
+# something like if Follow.followed_user = user_to_unfollow
     def destroy(self, request, *args, **kwargs):
         user_to_unfollow = self.get_object_or_404(CustomUser, pk=self.kwargs['pk'])
-        self.perform_destroy(user_to_unfollow)
+        list_of_followed_users = Follow.objects.filter(following_user=self.request.user)
+        for user in list_of_followed_users:
+            if user.followed_user == user_to_unfollow:
+                self.perform_destroy(user)
         return Response(status=status.HTTP_204_NO_CONTENT)
 

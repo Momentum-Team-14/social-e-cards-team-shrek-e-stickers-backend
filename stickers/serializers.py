@@ -7,12 +7,15 @@ from rest_framework.serializers import ListSerializer
 class StickerListSerializer(serializers.ModelSerializer):
     creator = serializers.SlugRelatedField(
         slug_field="username", read_only=True)
+    creator_pk = serializers.SerializerMethodField()
 
     class Meta:
         model = Sticker
         fields = ('id', 'title', 'background_color', 'pattern_url', 'image_url', 'font',
-                  'font_color', 'message', 'creator', 'created_at', 'updated_at', 'draft')
+                  'font_color', 'message', 'creator_pk', 'creator', 'created_at', 'updated_at', 'draft')
 
+    def get_creator_pk(self, obj):
+        return obj.creator.id
 
 class StickerDetailSerializer(serializers.ModelSerializer):
 
@@ -23,16 +26,18 @@ class StickerDetailSerializer(serializers.ModelSerializer):
 
 # serializer for Follow pages that uses CustomUser model fields
 class FollowListSerializer(serializers.ModelSerializer):
-    # username = serializers.SerializerMethodField()
+    follower_pk = serializers.SerializerMethodField()
+    username = serializers.SerializerMethodField()
 
     class Meta:
         model = CustomUser
-        fields = ('id', 'display_name', 'avatar',)
-        # fields = ('id', 'username', 'display_name', 'avatar',)
+        fields = ('follower_pk', 'username', 'display_name', 'avatar',)
 
-    # def get_username(self, obj):
-    #     username = CustomUser.objects.filter(id=obj.id)
-    #     return username
+    def get_follower_pk(self, obj):
+            return obj.following_user.id
+    
+    def get_username(self, obj):
+        return obj.following_user.username
 
 
 class UserSerializer(serializers.ModelSerializer):
