@@ -5,6 +5,8 @@ from .serializers import StickerListSerializer, StickerDetailSerializer, UserSer
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.reverse import reverse
+from django.db import IntegrityError
+from rest_framework.serializers import ValidationError
 
 
 @api_view(['GET'])
@@ -106,7 +108,10 @@ class FollowCreate(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         user_to_follow = get_object_or_404(CustomUser, pk=self.kwargs['pk'])
         user = self.request.user
-        serializer.save(followed_user=user_to_follow, following_user=user)
+        try:
+            serializer.save(followed_user=user_to_follow, following_user=user)
+        except IntegrityError:
+            raise ValidationError({"error": "Already following this user"})
 
 
 class UnFollowDestroy(generics.RetrieveDestroyAPIView):

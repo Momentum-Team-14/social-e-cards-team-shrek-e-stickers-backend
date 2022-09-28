@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db.models.constraints import UniqueConstraint
 from django.utils.translation import gettext_lazy as _
+from rest_framework.serializers import ValidationError
 
 
 # Create your models here.
@@ -24,6 +26,17 @@ class Follow(models.Model):
         CustomUser, on_delete=models.CASCADE, related_name='following', blank=True, null=True)
     followed_user = models.ForeignKey(
         CustomUser, on_delete=models.CASCADE, related_name='followed_by', blank=True, null=True)
+
+    class Meta:
+        constraints = [
+            UniqueConstraint(fields=['following_user', 'followed_user'], name='unique-follow')
+        ]
+
+    def save(self, *args, **kwargs):
+        if self.following_user.pk != self.followed_user.pk:
+            return super().save(*args, **kwargs)
+        else:
+            raise ValidationError('You can not follow yourself')
 
     def __str__(self):
         return f'Follower:{self.following_user.username} Following:{self.followed_user.username}'
