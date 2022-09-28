@@ -9,7 +9,6 @@ from rest_framework.decorators import api_view
 from rest_framework.reverse import reverse
 from django.db import IntegrityError
 from rest_framework.serializers import ValidationError
-import permissions
 
 
 @api_view(['GET'])
