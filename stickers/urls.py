@@ -13,11 +13,13 @@ urlpatterns = [
          views.UserStickerList.as_view(), name='user-sticker'),
     path('mystickers/', views.UserStickerList.as_view(), name='my-stickers'),
     path('user/<int:pk>/follow/', views.FollowCreate.as_view(), name='follow-user'),
-    path('user/<int:pk>/unfollow/', views.UnFollowDestroy.as_view(), name='unfollow-user'),
+    path('user/<int:pk>/unfollow/',
+         views.UnFollowDestroy.as_view(), name='unfollow-user'),
     path('following/', views.FollowingList.as_view(), name="following-users"),
-    path('followed-by/', views.FollowedList.as_view(), name="followed-by-users"),
+    path('followers/', views.FollowedByList.as_view(), name="followers"),
     path('', views.api_root),
-    path('stickers/following/', views.FollowListStickers.as_view(), name="follow-stickers"),
+    path('stickers/following/', views.FollowListStickers.as_view(),
+         name="follow-stickers"),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

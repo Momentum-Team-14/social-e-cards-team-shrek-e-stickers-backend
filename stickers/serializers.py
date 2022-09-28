@@ -17,6 +17,7 @@ class StickerListSerializer(serializers.ModelSerializer):
     def get_creator_pk(self, obj):
         return obj.creator.id
 
+
 class StickerDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -25,32 +26,42 @@ class StickerDetailSerializer(serializers.ModelSerializer):
 
 
 # serializer for Follow pages that uses CustomUser model fields
-class FollowListSerializer(serializers.ModelSerializer):
-    following_username = serializers.SerializerMethodField()
+class FollowingListSerializer(serializers.ModelSerializer):
     followed_username = serializers.SerializerMethodField()
 
     class Meta:
         model = Follow
-        fields = ('following_user', 'following_username', 'followed_user', 'followed_username',)
+        fields = ('followed_user', 'followed_username',)
 
-    def get_following_username(self, obj):
-            return obj.following_user.username
-    
     def get_followed_username(self, obj):
         return obj.followed_user.username
+
+    def get_followed_avatar(self, obj):
+        return obj.followed_user.avatar
+
+
+class FollowerListSerializer(serializers.ModelSerializer):
+    following_username = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Follow
+        fields = ('following_user', 'following_username',)
+
+    def get_following_username(self, obj):
+        return obj.following_user.username
 
 
 class UserSerializer(serializers.ModelSerializer):
     following_count = serializers.SerializerMethodField()
     followed_count = serializers.SerializerMethodField()
     stickers = StickerListSerializer(many=True, read_only=True)
-    following = FollowListSerializer(many=True, read_only=True)
-    followed_by = FollowListSerializer(many=True, read_only=True)
+    following = FollowingListSerializer(many=True, read_only=True)
+    followed_by = FollowerListSerializer(many=True, read_only=True)
 
     class Meta:
         model = CustomUser
-        fields = ('id', 'username', 'bio', 'avatar', 'display_name', 'following', 'followed_by',
-                  'following_count', 'followed_count', 'stickers',)
+        fields = ('id', 'username', 'bio', 'avatar', 'display_name',
+                  'following_count', 'following', 'followed_count', 'followed_by', 'stickers',)
 
     def get_following_count(self, obj):
         count = len(Follow.objects.filter(following_user=obj.id))
