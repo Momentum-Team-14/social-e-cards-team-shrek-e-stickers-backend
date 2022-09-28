@@ -119,14 +119,28 @@ class UnFollowDestroy(generics.RetrieveDestroyAPIView):
     serializer_class = FollowSerializer
     permission_classes = ()
 
-# need to get the pk of the Follow instance in order to destroy it
-# something like if Follow.followed_user = user_to_unfollow
+    def get_object(self):
+        queryset = self.filter_queryset(self.get_queryset())
+        user_to_unfollow = self.kwargs['pk']
+        follow_instance = Follow.objects.filter(followed_user=user_to_unfollow).first().id
+        follow_kwargs = {}
+        follow_kwargs['pk'] = follow_instance
+        lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
+        assert lookup_url_kwarg in follow_kwargs, (
+            'Expected view %s to be called with a URL keyword argument '
+            'named "%s". Fix your URL conf, or set the `.lookup_field` '
+            'attribute on the view correctly.' %
+            (self.__class__.__name__, lookup_url_kwarg)
+        )
+        filter_kwargs = {self.lookup_field: follow_kwargs[lookup_url_kwarg]}
+        obj = get_object_or_404(queryset, **filter_kwargs)
+        self.check_object_permissions(self.request, obj)
+        return obj
+
     def destroy(self, request, *args, **kwargs):
-        user_to_unfollow = self.get_object_or_404(
-            CustomUser, pk=self.kwargs['pk'])
-        list_of_followed_users = Follow.objects.filter(
-            following_user=self.request.user)
-        for user in list_of_followed_users:
-            if user.followed_user == user_to_unfollow:
-                self.perform_destroy(user)
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        follow_instance = self.get_object()
+        try:
+            self.perform_destroy(follow_instance)
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except IntegrityError:
+            raise ValidationError({"error": "You are not following this user"})
