@@ -61,12 +61,9 @@ class UserList(generics.ListAPIView):
 class UserProfile(generics.RetrieveUpdateDestroyAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
-    permission_classes = ()
 
-    def get_queryset(self):
-        user_id = CustomUser.objects.get(id=self.request.user.id)
-        queryset = CustomUser.objects.filter(username=user_id.username)
-        return queryset
+    def get_object(self):
+        return self.request.user
 
 
 class UserDetail(generics.RetrieveUpdateDestroyAPIView):
