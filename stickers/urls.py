@@ -11,7 +11,7 @@ urlpatterns = [
     path('profile/<int:pk>/', views.UserDetail.as_view(), name='profile-detail'),
     path('user/<int:pk>/stickers/',
          views.UserStickerList.as_view(), name='user-sticker'),
-    path('mystickers/', views.UserStickerList.as_view(), name='my-stickers'),
+    path('mystickers/', views.MyStickerList.as_view(), name='my-stickers'),
     path('user/<int:pk>/follow/', views.FollowCreate.as_view(), name='follow-user'),
     path('user/<int:pk>/unfollow/',
          views.UnFollowDestroy.as_view(), name='unfollow-user'),
