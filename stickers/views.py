@@ -1,6 +1,5 @@
 from django.shortcuts import render, get_object_or_404
 from rest_framework import generics, status
-
 from stickers.permissions import IsOwnerOrReadOnly
 from .models import Sticker, CustomUser, Follow
 from .serializers import StickerListSerializer, StickerDetailSerializer, UserSerializer, FollowSerializer, FollowingListSerializer, FollowerListSerializer
