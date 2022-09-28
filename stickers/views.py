@@ -9,7 +9,7 @@ from rest_framework.decorators import api_view
 from rest_framework.reverse import reverse
 from django.db import IntegrityError
 from rest_framework.serializers import ValidationError
-import permissions
+from rest_framework import filters
 
 
 @api_view(['GET'])
@@ -23,12 +23,16 @@ class StickerList(generics.ListCreateAPIView):
     queryset = Sticker.objects.all()
     serializer_class = StickerListSerializer
     permission_classes = []
+    filter_backends = [filters.OrderingFilter]
+    ordering_fields = ['created_at', 'username', 'display_name']
 
 
 class UserStickerList(generics.ListCreateAPIView):
     queryset = Sticker.objects.all()
     serializer_class = StickerListSerializer
     # permission_classes = [IsOwnerOrReadOnly,]
+    filter_backends = [filters.OrderingFilter]
+    ordering_fields = ['created_at', 'title']
 
     def get_queryset(self):
         user = get_object_or_404(CustomUser, pk=self.kwargs['pk'])
@@ -39,6 +43,8 @@ class UserStickerList(generics.ListCreateAPIView):
 class MyStickerList(generics.ListCreateAPIView):
     serializer_class = StickerListSerializer
     permission_classes = []
+    filter_backends = [filters.OrderingFilter]
+    ordering_fields = ['created_at', 'title']
 
     def perform_create(self, serializer):
         serializer.save(creator=self.request.user)
@@ -52,6 +58,8 @@ class FollowListStickers(generics.ListAPIView):
     queryset = Sticker.objects.none()
     serializer_class = StickerListSerializer
     permission_classes = ()
+    filter_backends = [filters.OrderingFilter]
+    ordering_fields = ['created_at', 'username', 'display_name']
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -73,6 +81,8 @@ class UserList(generics.ListAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
     permission_classes = ()
+    filter_backends = [filters.OrderingFilter]
+    ordering_fields = ['id', 'username']
 
 
 class UserProfile(generics.RetrieveUpdateDestroyAPIView):
@@ -95,6 +105,8 @@ class FollowingList(generics.ListAPIView):
     queryset = Follow.objects.all()
     serializer_class = FollowingListSerializer
     permission_classes = ()
+    filter_backends = [filters.OrderingFilter]
+    ordering_fields = ['username']
 
     def get_queryset(self):
         user_username = self.request.user.username
@@ -107,6 +119,8 @@ class FollowedByList(generics.ListAPIView):
     queryset = Follow.objects.all()
     serializer_class = FollowerListSerializer
     permission_classes = ()
+    filter_backends = [filters.OrderingFilter]
+    ordering_fields = ['username']
 
     def get_queryset(self):
         user_username = self.request.user.username
@@ -137,7 +151,8 @@ class UnFollowDestroy(generics.RetrieveDestroyAPIView):
     def get_object(self):
         queryset = self.filter_queryset(self.get_queryset())
         user_to_unfollow = self.kwargs['pk']
-        follow_instance = Follow.objects.filter(followed_user=user_to_unfollow).first().id
+        follow_instance = Follow.objects.filter(
+            followed_user=user_to_unfollow).first().id
         follow_kwargs = {}
         follow_kwargs['pk'] = follow_instance
         lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
