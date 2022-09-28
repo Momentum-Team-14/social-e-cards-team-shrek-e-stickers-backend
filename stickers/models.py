@@ -29,7 +29,8 @@ class Follow(models.Model):
 
     class Meta:
         constraints = [
-            UniqueConstraint(fields=['following_user', 'followed_user'], name='unique-follow')
+            UniqueConstraint(
+                fields=['following_user', 'followed_user'], name='unique-follow')
         ]
 
     def save(self, *args, **kwargs):
@@ -90,7 +91,6 @@ class Sticker(models.Model):
         BLUE = 'blue', _('Blue')
         PURPLE = 'purple', _('Purple')
         RED = 'red', _('Red')
-        FUSCHIA = 'fuschia', _('Fuschia')
         PINK = 'pink', _('Pink')
         ORANGE = 'orange', _('Orange')
 
