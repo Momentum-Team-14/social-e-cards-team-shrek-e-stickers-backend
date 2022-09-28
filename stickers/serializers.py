@@ -36,9 +36,6 @@ class FollowingListSerializer(serializers.ModelSerializer):
     def get_followed_username(self, obj):
         return obj.followed_user.username
 
-    def get_followed_avatar(self, obj):
-        return obj.followed_user.avatar
-
 
 class FollowerListSerializer(serializers.ModelSerializer):
     following_username = serializers.SerializerMethodField()
