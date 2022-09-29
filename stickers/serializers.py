@@ -27,6 +27,7 @@ class StickerDetailSerializer(serializers.ModelSerializer):
 
 # serializer for Follow pages that uses CustomUser model fields
 class FollowingListSerializer(serializers.ModelSerializer):
+
     followed_username = serializers.SerializerMethodField()
     followed_display_name = serializers.SerializerMethodField()
     followed_avatar = serializers.SerializerMethodField()
