@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db.models.constraints import UniqueConstraint
 from django.utils.translation import gettext_lazy as _
 from rest_framework.serializers import ValidationError
+from django.db.models import UniqueConstraint
 
 
 # Create your models here.
@@ -106,7 +107,8 @@ class Sticker(models.Model):
 
     title = models.CharField(
         max_length=50,
-        help_text="name of your sticker")
+        help_text="name of your sticker",
+    )
     background_color = models.CharField(
         max_length=50,
         choices=Colors.choices,
@@ -149,6 +151,12 @@ class Sticker(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     draft = models.BooleanField(default=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['title', 'creator'], name='unique_title')
+        ]
 
     def __str__(self):
         return f'{self.title} created by {self.creator}'
