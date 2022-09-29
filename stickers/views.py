@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from rest_framework import generics, status
-from stickers.permissions import IsOwnerOrReadOnly
+from stickers.permissions import IsCreatorOrReadOnly, IsUserOrReadOnly
 from .models import Sticker, CustomUser, Follow
 from .serializers import StickerListSerializer, StickerDetailSerializer, UserSerializer, FollowSerializer, FollowingListSerializer, FollowerListSerializer
 from rest_framework.response import Response
@@ -8,6 +8,7 @@ from rest_framework.decorators import api_view
 from rest_framework.reverse import reverse
 from django.db import IntegrityError
 from rest_framework.serializers import ValidationError
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework import filters
 
 
@@ -25,18 +26,24 @@ class StickerList(generics.ListCreateAPIView):
     filter_backends = [filters.OrderingFilter]
     ordering_fields = ['-created_at', 'creator']
 
+    def perform_create(self, serializer):
+        serializer.save(creator=self.request.user)
+
 
 class UserStickerList(generics.ListCreateAPIView):
     queryset = Sticker.objects.all()
     serializer_class = StickerListSerializer
-    # permission_classes = [IsOwnerOrReadOnly,]
+    permission_classes = []
     filter_backends = [filters.OrderingFilter]
     ordering_fields = ['created_at', 'title']
 
-    def get_queryset(self):
+   def get_queryset(self):
         user = get_object_or_404(CustomUser, pk=self.kwargs['pk'])
         queryset = user.stickers.all().order_by('-created_at')
         return queryset.order_by('-created_at')
+
+    def perform_create(self, serializer):
+        serializer.save(creator=self.request.user)
 
 
 class MyStickerList(generics.ListCreateAPIView):
@@ -73,7 +80,7 @@ class FollowListStickers(generics.ListAPIView):
 class StickerDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Sticker.objects.all()
     serializer_class = StickerListSerializer
-    # permission_classes = [IsOwnerOrReadOnly,]
+    permission_classes = [IsCreatorOrReadOnly,]
 
 
 class UserList(generics.ListAPIView):
@@ -87,7 +94,7 @@ class UserList(generics.ListAPIView):
 class UserProfile(generics.RetrieveUpdateDestroyAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
-    # permission_classes = [IsOwnerOrReadOnly,]
+    permission_classes = [IsUserOrReadOnly,]
 
     def get_object(self):
         return self.request.user
@@ -96,7 +103,7 @@ class UserProfile(generics.RetrieveUpdateDestroyAPIView):
 class UserDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
-    # permission_classes = [IsOwnerOrReadOnly,]
+    permission_classes = [IsUserOrReadOnly,]
 
 
 # List of User's logged in user is following
