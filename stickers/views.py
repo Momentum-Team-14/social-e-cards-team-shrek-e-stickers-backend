@@ -19,11 +19,11 @@ def api_root(request, format=None):
 
 
 class StickerList(generics.ListCreateAPIView):
-    queryset = Sticker.objects.all()
+    queryset = Sticker.objects.all().order_by('-created_at')
     serializer_class = StickerListSerializer
     permission_classes = []
     filter_backends = [filters.OrderingFilter]
-    ordering_fields = ['created_at', 'username', 'display_name']
+    ordering_fields = ['-created_at', 'creator']
 
 
 class UserStickerList(generics.ListCreateAPIView):
@@ -35,8 +35,8 @@ class UserStickerList(generics.ListCreateAPIView):
 
     def get_queryset(self):
         user = get_object_or_404(CustomUser, pk=self.kwargs['pk'])
-        queryset = user.stickers.all()
-        return queryset
+        queryset = user.stickers.all().order_by('-created_at')
+        return queryset.order_by('-created_at')
 
 
 class MyStickerList(generics.ListCreateAPIView):
@@ -50,7 +50,7 @@ class MyStickerList(generics.ListCreateAPIView):
 
     def get_queryset(self):
         queryset = self.request.user.stickers.all()
-        return queryset
+        return queryset.order_by('-created_at')
 
 
 class FollowListStickers(generics.ListAPIView):
@@ -61,13 +61,13 @@ class FollowListStickers(generics.ListAPIView):
     ordering_fields = ['created_at', 'username', 'display_name']
 
     def get_queryset(self):
-        queryset = super().get_queryset()
+        queryset = super().get_queryset().order_by('-created_at')
         list_of_followed_users = Follow.objects.filter(
             following_user=self.request.user)
         for user in list_of_followed_users:
             stickers = Sticker.objects.filter(creator=user.followed_user)
             queryset = queryset | stickers
-        return queryset
+        return queryset.order_by('-created_at')
 
 
 class StickerDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -104,8 +104,6 @@ class FollowingList(generics.ListAPIView):
     queryset = Follow.objects.all()
     serializer_class = FollowingListSerializer
     permission_classes = ()
-    filter_backends = [filters.OrderingFilter]
-    ordering_fields = ['username']
 
     def get_queryset(self):
         user_username = self.request.user.username
@@ -118,8 +116,6 @@ class FollowedByList(generics.ListAPIView):
     queryset = Follow.objects.all()
     serializer_class = FollowerListSerializer
     permission_classes = ()
-    filter_backends = [filters.OrderingFilter]
-    ordering_fields = ['username']
 
     def get_queryset(self):
         user_username = self.request.user.username

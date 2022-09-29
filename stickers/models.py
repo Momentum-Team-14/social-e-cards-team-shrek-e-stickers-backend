@@ -151,4 +151,4 @@ class Sticker(models.Model):
     draft = models.BooleanField(default=True)
 
     def __str__(self):
-        return f'{self.title}'
+        return f'{self.title} created by {self.creator}'
