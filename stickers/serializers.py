@@ -8,14 +8,18 @@ class StickerListSerializer(serializers.ModelSerializer):
     creator = serializers.SlugRelatedField(
         slug_field="username", read_only=True)
     creator_pk = serializers.SerializerMethodField()
+    image_url_label = serializers.SerializerMethodField()
 
     class Meta:
         model = Sticker
-        fields = ('id', 'title', 'background_color', 'pattern_url', 'image_url', 'font',
+        fields = ('id', 'title', 'background_color', 'pattern_url', 'image_url', 'image_url_label', 'font',
                   'font_color', 'message', 'creator_pk', 'creator', 'created_at', 'updated_at', 'draft')
 
     def get_creator_pk(self, obj):
         return obj.creator.id
+
+    def get_image_url_label(self, obj):
+        return obj.get_image_url_display()
 
 
 class StickerDetailSerializer(serializers.ModelSerializer):
