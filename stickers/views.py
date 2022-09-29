@@ -25,7 +25,6 @@ class StickerList(generics.ListCreateAPIView):
     permission_classes = []
     filter_backends = [filters.OrderingFilter]
     ordering_fields = ['-created_at', 'creator']
-    paginate_by = 2
 
     def perform_create(self, serializer):
         serializer.save(creator=self.request.user)
@@ -37,17 +36,8 @@ class UserStickerList(generics.ListCreateAPIView):
     permission_classes = []
     filter_backends = [filters.OrderingFilter]
     ordering_fields = ['created_at', 'title']
-    paginate_by = 10
 
-
-<< << << < HEAD
-   paginate_by = 10
-== == == =
-   filter_backends = [filters.OrderingFilter]
-    ordering_fields = ['created_at', 'title']
->>>>>> > 465df187d20b7b639df60882f4aeeebbdbcfac6d
-
-   def get_queryset(self):
+    def get_queryset(self):
         user = get_object_or_404(CustomUser, pk=self.kwargs['pk'])
         queryset = user.stickers.all().order_by('-created_at')
         return queryset.order_by('-created_at')
