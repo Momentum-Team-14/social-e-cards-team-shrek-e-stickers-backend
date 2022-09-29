@@ -22,6 +22,7 @@ class StickerList(generics.ListCreateAPIView):
     queryset = Sticker.objects.all()
     serializer_class = StickerListSerializer
     permission_classes = []
+    paginate_by = 2
 
     def perform_create(self, serializer):
         serializer.save(creator=self.request.user)
@@ -31,6 +32,7 @@ class UserStickerList(generics.ListCreateAPIView):
     queryset = Sticker.objects.all()
     serializer_class = StickerListSerializer
     permission_classes = []
+    paginate_by = 10
 
     def get_queryset(self):
         user = get_object_or_404(CustomUser, pk=self.kwargs['pk'])
@@ -71,7 +73,7 @@ class FollowListStickers(generics.ListAPIView):
 class StickerDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Sticker.objects.all()
     serializer_class = StickerListSerializer
-    permission_classes = [IsCreatorOrReadOnly,]
+    permission_classes = [IsCreatorOrReadOnly, ]
 
 
 class UserList(generics.ListAPIView):
@@ -83,7 +85,7 @@ class UserList(generics.ListAPIView):
 class UserProfile(generics.RetrieveUpdateDestroyAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [IsUserOrReadOnly,]
+    permission_classes = [IsUserOrReadOnly, ]
 
     def get_object(self):
         return self.request.user
@@ -92,7 +94,7 @@ class UserProfile(generics.RetrieveUpdateDestroyAPIView):
 class UserDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [IsUserOrReadOnly,]
+    permission_classes = [IsUserOrReadOnly, ]
 
 
 # List of User's logged in user is following
@@ -142,7 +144,8 @@ class UnFollowDestroy(generics.RetrieveDestroyAPIView):
     def get_object(self):
         queryset = self.filter_queryset(self.get_queryset())
         user_to_unfollow = self.kwargs['pk']
-        follow_instance = Follow.objects.filter(followed_user=user_to_unfollow).first().id
+        follow_instance = Follow.objects.filter(
+            followed_user=user_to_unfollow).first().id
         follow_kwargs = {}
         follow_kwargs['pk'] = follow_instance
         lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
