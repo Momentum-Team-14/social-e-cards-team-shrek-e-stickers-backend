@@ -27,25 +27,42 @@ class StickerDetailSerializer(serializers.ModelSerializer):
 
 # serializer for Follow pages that uses CustomUser model fields
 class FollowingListSerializer(serializers.ModelSerializer):
+
     followed_username = serializers.SerializerMethodField()
+    followed_display_name = serializers.SerializerMethodField()
+    followed_avatar = serializers.SerializerMethodField()
 
     class Meta:
         model = Follow
-        fields = ('followed_user', 'followed_username',)
+        fields = ('followed_user', 'followed_username', 'followed_display_name', 'followed_avatar',)
 
     def get_followed_username(self, obj):
         return obj.followed_user.username
 
+    def get_followed_display_name(self, obj):
+        return obj.followed_user.display_name
+
+    def get_followed_avatar(self, obj):
+        return obj.followed_user.avatar
+
 
 class FollowerListSerializer(serializers.ModelSerializer):
     following_username = serializers.SerializerMethodField()
+    following_display_name = serializers.SerializerMethodField()
+    following_avatar = serializers.SerializerMethodField()
 
     class Meta:
         model = Follow
-        fields = ('following_user', 'following_username',)
+        fields = ('following_user', 'following_username', 'following_display_name', 'following_avatar',)
 
     def get_following_username(self, obj):
         return obj.following_user.username
+
+    def get_following_display_name(self, obj):
+        return obj.following_user.display_name
+
+    def get_following_avatar(self, obj):
+        return obj.following_user.avatar
 
 
 class UserSerializer(serializers.ModelSerializer):
