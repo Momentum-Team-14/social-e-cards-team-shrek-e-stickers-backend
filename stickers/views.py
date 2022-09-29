@@ -37,7 +37,7 @@ class UserStickerList(generics.ListCreateAPIView):
     filter_backends = [filters.OrderingFilter]
     ordering_fields = ['created_at', 'title']
 
-   def get_queryset(self):
+    def get_queryset(self):
         user = get_object_or_404(CustomUser, pk=self.kwargs['pk'])
         queryset = user.stickers.all().order_by('-created_at')
         return queryset.order_by('-created_at')
@@ -80,7 +80,7 @@ class FollowListStickers(generics.ListAPIView):
 class StickerDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Sticker.objects.all()
     serializer_class = StickerListSerializer
-    permission_classes = [IsCreatorOrReadOnly,]
+    permission_classes = [IsCreatorOrReadOnly, ]
 
 
 class UserList(generics.ListAPIView):
@@ -94,7 +94,7 @@ class UserList(generics.ListAPIView):
 class UserProfile(generics.RetrieveUpdateDestroyAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [IsUserOrReadOnly,]
+    permission_classes = [IsUserOrReadOnly, ]
 
     def get_object(self):
         return self.request.user
@@ -103,7 +103,7 @@ class UserProfile(generics.RetrieveUpdateDestroyAPIView):
 class UserDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [IsUserOrReadOnly,]
+    permission_classes = [IsUserOrReadOnly, ]
 
 
 # List of User's logged in user is following
