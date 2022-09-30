@@ -3,7 +3,6 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=django
 
 ### Readme in progress
-README.md
 
 ### Django ###
 *.log

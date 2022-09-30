@@ -17,3 +17,5 @@
 | DELETE | user/<:id>/unfollow/ | -          | unfollow user with specified id             | ?? change to unfollow/user/id ...                |
 | GET    | /folowing/           | -          | list of users followed by logged in user    |                                                  |
 | POST   | /followers/          | user by id | list of users following logged in user      | add user as a friend                             |
+
+PRODUCTION URL: https://team-shrek-e-stickers-backend.herokuapp.com

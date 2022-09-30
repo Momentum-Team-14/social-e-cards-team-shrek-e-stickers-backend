@@ -2,13 +2,12 @@ from django.shortcuts import render, get_object_or_404
 from rest_framework import generics, status
 from stickers.permissions import IsCreatorOrReadOnly, IsUserOrReadOnly
 from .models import Sticker, CustomUser, Follow
-from .serializers import StickerListSerializer, StickerDetailSerializer, UserSerializer, FollowSerializer, FollowingListSerializer, FollowerListSerializer
+from .serializers import StickerListSerializer, UserSerializer, FollowSerializer, FollowingListSerializer, FollowerListSerializer
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.reverse import reverse
 from django.db import IntegrityError
 from rest_framework.serializers import ValidationError
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework import filters
 
 
