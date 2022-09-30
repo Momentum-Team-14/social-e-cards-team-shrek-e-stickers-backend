@@ -1,6 +1,8 @@
 # Stickers
 
-## Routes that don't require authentication
+## https://team-shrek-e-stickers-backend.herokuapp.com
+
+## Routes require authentication
 
 ### GET `stickers/`
 
@@ -15,7 +17,7 @@ List all public stickers
 }
 ```
 
-## Routes that require authentication
+## Routes require authentication
 
 ### GET `/users/`
 
