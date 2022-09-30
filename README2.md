@@ -9,9 +9,9 @@
 | POST   | stickers/            | sticker    | new sticker                                 | creates a sticker                                |
 | GET    | mystickers/          | -          | list of stickers for logged in user         |                                                  |
 | GET    | stickers/following/  | -          | list of stickers from followed users        |                                                  |
-| GET    | sticker/:id/         | -          | data for sticker with specified id          |                                                  |
-| PATCH  | sticker/:id/         | card data  | update sticker                              | updates the sticker with specified id            |
-| DELETE | sticker/:id/         | -          | -                                           | deletes sticker with specified id                |
+| GET    | stickers/:id/        | -          | data for sticker with specified id          |                                                  |
+| PATCH  | stickers/:id/        | card data  | update sticker                              | updates the sticker with specified id            |
+| DELETE | stickers/:id/        | -          | -                                           | deletes sticker with specified id                |
 | GET    | user/:id/stickers/   | -          | list of stickers for user with specified id | ?? change to stickers/user/id to keep consistent |
 | POST   | user/<:id>/follow/   | -          | follow user with specified id               | ?? change to follow/user/id to keep constistent  |
 | DELETE | user/<:id>/unfollow/ | -          | unfollow user with specified id             | ?? change to unfollow/user/id ...                |

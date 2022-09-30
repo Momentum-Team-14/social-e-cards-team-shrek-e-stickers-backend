@@ -27,7 +27,10 @@ class StickerList(generics.ListCreateAPIView):
     ordering_fields = ['-created_at', 'creator']
 
     def perform_create(self, serializer):
-        serializer.save(creator=self.request.user)
+        try:
+            serializer.save(creator=self.request.user)
+        except IntegrityError:
+            raise ValidationError({"error": "Sticker title already exists"})
 
 
 class UserStickerList(generics.ListCreateAPIView):
