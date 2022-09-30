@@ -25,45 +25,37 @@ List all users
 
 ---
 
-### GET `/profile/<int:pk>/`
+### GET/PATCH/DELETE `/myprofile/`
 
-Detail for one user (getting the information using the pk for the user)
+profile for logged in user
+update, edit delete
 
 ---
 
-### PATCH/PUT/DELETE `/profile/<int:pk>/`
+### POST/PATCH/PUT/DELETE `/profile/<int:pk>/`
 
+Detail for one user (getting the information using the pk for the user)
 Edit or delete for one user (pk for the user)
 
 ---
 
-### GET `/user/<int:pk>/stickers`
+### GET/POST `/mystickers/`
 
 List stickers for logged in user (pk for the user)
 
 ---
 
-### GET `/stickers/`
+### GET/POST `/stickers/`
 
 List of all stickers
+create new sticker
 
 ---
 
-### POST `/stickers/`
-
-Create a new stickers
-
----
-
-### GET `/stickers/<int:pk>/`
+### GET/PATCH/PUT/DELETE `/stickers/<int:pk>/`
 
 Detail about one sticker
-
----
-
-### PATCH/PUT/DELETE `/stickers/<int:pk>/`
-
-Update or delete a specific sticker
+update or delete sticker
 
 ---
 
@@ -73,9 +65,15 @@ List of stickers from users followed by logged in user
 
 ---
 
-### POST/PATCH/PUT `/user/<int:pk>/follow/`
+### POST `/user/<int:pk>/follow/`
 
-Follow/unfollow a user (pk for the user)
+Follow/unfollow a user (pk for the user to follow)
+
+---
+
+### DELETE `/user/<int:pk>/unfollow/`
+
+Follow/unfollow a user (pk for the user to follow)
 
 ---
 
